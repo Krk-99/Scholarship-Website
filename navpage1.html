@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First Website</title>
+    <title>Scholarships - OSM</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -16,18 +16,34 @@
     </div>
     <section class="Box1">
         <div id="TB1" class="TopBox">
-            <h1 id="TB1Title">Welcome!</h1>
-            <p id="TB1Text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pulvinar, orci ornare faucibus lacinia, sapien risus aliquet elit, eget facilisis justo metus non eros. Pellentesque dapibus nec sapien et eleifend. Nunc ullamcorper hendrerit odio vitae imperdiet. Ut malesuada orci sed lorem pellentesque, sed tristique tortor volutpat. Aenean sagittis turpis elit, vitae interdum justo vehicula et. Phasellus molestie, elit eget mattis pulvinar, ligula diam luctus sapien, feugiat imperdiet elit felis laoreet quam. Integer sit amet congue eros. Etiam blandit lobortis ante sit amet pulvinar. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce felis odio, congue ut velit ac, semper faucibus ante. Mauris viverra ut neque et consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam a fermentum velit. Donec tincidunt aliquet fringilla. Quisque feugiat id risus non pulvinar. Nulla mi nibh, mollis in luctus sed, scelerisque mattis mi.</p>
+            <h1 id="TB1Title">Scholarships</h1>
+            <p id="TB1Text">Browse over 100 scholarships available to underrepresented students across Ontario. Use the category filters on the left to narrow results, or scroll through all available awards. Click any card to view full details and the official application link.</p>
         </div>
     </section>
-    <section class="Box2">
-        <div class="LeftBox">
-            <!-- Buttons injected by homescript.js -->
+
+    <section class="Box2 ScholarshipsLayout">
+        <div class="LeftBox" id="filterSidebar">
+            <!-- Filter buttons injected by homescript.js -->
         </div>
-        <div class="RightBox" id="scholarshipRightBox">
-            <!-- Cards injected by homescript.js -->
+        <div class="ScholarshipsMain">
+            <div class="FilterStrip" id="filterStrip">
+                <span class="ResultCount" id="resultCount">Showing all 107 scholarships</span>
+            </div>
+            <div class="RightBox" id="scholarshipRightBox">
+                <!-- Cards injected by homescript.js -->
+            </div>
         </div>
     </section>
+
+    <!-- Notice Popup -->
+    <div id="noticeOverlay" class="Notice-Overlay">
+        <div class="Notice-Modal">
+            <span class="Notice-Icon">&#9888;</span>
+            <h2 class="Notice-Title">Heads Up</h2>
+            <p class="Notice-Body">Not all scholarship cards may have working website redirects. If you click a card and the link doesn't work, please report it by emailing us at the address listed on the <a href="navpage2.html" class="Notice-InlineLink">Contact Us</a> page.</p>
+            <button class="Notice-Btn" id="noticeClose">Got it</button>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div id="scModal" class="SC-ModalOverlay">

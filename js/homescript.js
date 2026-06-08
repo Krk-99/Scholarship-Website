@@ -115,24 +115,23 @@ var scholarships = [
     { id: "S107", name: "Women in Aviation International Scholarships",         cat: "Gender Equity & Women in STEM",          desc: "Highly specialized aviation, piloting, and aerospace engineering bursaries open to Canadian applicants.",                                                          url: "https://www.wai.org/scholarships" }
 ];
 
-// Categories
-
+// ── Categories ───────────────────────────────────────────────
 var cat = [
     "Indigenous Students",
-    "Black Students", 
-    "Other Racialized & Ethnic Communities", 
-    "Students with Disabilities", 
+    "Black Students",
+    "Other Racialized & Ethnic Communities",
+    "Students with Disabilities",
     "2SLGBTQI+ Students",
     "Gender Equity & Women in STEM"
-]
+];
 
-// ── Category accent colours ─────────────────────────────────
+// ── Category accent colours ──────────────────────────────────
 var catAccent = {
     "Indigenous Students":                   "#c8832a",
     "Black Students":                        "#2e7d32",
     "Other Racialized & Ethnic Communities": "#3f51b5",
     "Students with Disabilities":            "#7b1fa2",
-    "2SLGBTQI+ Students":                     "#c2185b",
+    "2SLGBTQI+ Students":                    "#c2185b",
     "Gender Equity & Women in STEM":         "#0090a1"
 };
 
@@ -141,75 +140,177 @@ var catBg = {
     "Black Students":                        "#edf7ed",
     "Other Racialized & Ethnic Communities": "#eef0fb",
     "Students with Disabilities":            "#f6eefb",
-    "2SLGBTQI+ Students":                     "#fde9f0",
+    "2SLGBTQI+ Students":                    "#fde9f0",
     "Gender Equity & Women in STEM":         "#e6f7f9"
 };
 
-// ── Build cards into .RightBox ──────────────────────────────
-var rightBox = document.getElementById('scholarshipRightBox');
+// ── Active filter state ──────────────────────────────────────
+var activeFilters = new Set();
 
-scholarships.forEach(function(s) {
-    var accent = catAccent[s.cat] || '#c8992a';
-    var bg     = catBg[s.cat]     || '#f9f6f0';
-
-    var card = document.createElement('div');
-    card.id        = s.id;
-    card.className = 'ScholarshipsCard';
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', 'View details for ' + s.name);
-
-    // Apply per-category colours directly on the card
-    card.style.borderTopColor  = accent;
-    card.style.backgroundColor = bg;
-
-    card.innerHTML =
-        '<span style="display:block;font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:' + accent + ';margin-bottom:0.4rem;">' + escHtml(s.cat) + '</span>' +
-        '<h3 style="font-family:\'Playfair Display\',Georgia,serif;font-size:0.92rem;font-weight:600;line-height:1.3;color:#0d2340;flex:1;">' + escHtml(s.name) + '</h3>';
-
-    card.addEventListener('click', function() { openModal(s); });
-    card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(s); }
-    });
-
-    rightBox.appendChild(card);
-});
-
-// ── Modal elements ──────────────────────────────────────────
-var overlay  = document.getElementById('scModal');
-var mCat     = document.getElementById('scModalCat');
-var mTitle   = document.getElementById('scModalTitle');
-var mDesc    = document.getElementById('scModalDesc');
-var mLink    = document.getElementById('scModalLink');
-var mClose   = document.getElementById('scModalClose');
-
-function openModal(s) {
-    var accent = catAccent[s.cat] || '#c8992a';
-    mCat.textContent   = s.cat;
-    mCat.style.color   = accent;
-    mTitle.textContent = s.name;
-    mDesc.textContent  = s.desc;
-    mLink.href         = s.url;
-    mLink.style.background = accent;
-    overlay.classList.add('sc-open');
-    document.body.style.overflow = 'hidden';
-    mClose.focus();
-}
-
-function closeModal() {
-    overlay.classList.remove('sc-open');
-    document.body.style.overflow = '';
-}
-
-mClose.addEventListener('click', closeModal);
-overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-
-// ── Utility ─────────────────────────────────────────────────
+// ── Utility ──────────────────────────────────────────────────
 function escHtml(str) {
     return str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+}
+
+// ── Update result count text ─────────────────────────────────
+function updateCount() {
+    var countEl = document.getElementById('resultCount');
+    if (!countEl) return;
+    var visible = scholarships.filter(function(s) {
+        return activeFilters.size === 0 || activeFilters.has(s.cat);
+    }).length;
+    if (activeFilters.size === 0) {
+        countEl.textContent = 'Showing all ' + scholarships.length + ' scholarships';
+    } else {
+        countEl.textContent = 'Showing ' + visible + ' of ' + scholarships.length + ' scholarships';
+    }
+}
+
+// ── Apply filter: show/hide cards ────────────────────────────
+function applyFilters() {
+    scholarships.forEach(function(s) {
+        var card = document.getElementById(s.id);
+        if (!card) return;
+        if (activeFilters.size === 0 || activeFilters.has(s.cat)) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    updateCount();
+}
+
+// ── Inject filter buttons into sidebar ──────────────────────
+var sidebar = document.getElementById('filterSidebar');
+
+if (sidebar) {
+    var sidebarLabel = document.createElement('p');
+    sidebarLabel.className = 'FilterSidebarLabel';
+    sidebarLabel.textContent = 'Filter by Category';
+    sidebar.appendChild(sidebarLabel);
+
+    cat.forEach(function(category) {
+        var btn = document.createElement('button');
+        btn.className = 'FilterBtn SidebarFilterBtn';
+        btn.textContent = category;
+        btn.setAttribute('data-cat', category);
+        btn.setAttribute('aria-pressed', 'false');
+
+        btn.addEventListener('click', function() {
+            if (activeFilters.has(category)) {
+                activeFilters.delete(category);
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+                btn.style.borderColor = '';
+                btn.style.color = '';
+                btn.style.background = '';
+            } else {
+                activeFilters.add(category);
+                btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
+                // Use category accent colour for the active state
+                var accent = catAccent[category] || '#c8992a';
+                btn.style.background = accent;
+                btn.style.borderColor = accent;
+                btn.style.color = '#ffffff';
+            }
+            applyFilters();
+        });
+
+        sidebar.appendChild(btn);
+    });
+}
+
+// ── Build scholarship cards into .RightBox ───────────────────
+var rightBox = document.getElementById('scholarshipRightBox');
+
+if (rightBox) {
+    scholarships.forEach(function(s) {
+        var accent = catAccent[s.cat] || '#c8992a';
+        var bg     = catBg[s.cat]     || '#f9f6f0';
+
+        var card = document.createElement('div');
+        card.id        = s.id;
+        card.className = 'ScholarshipsCard';
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', 'View details for ' + s.name);
+
+        card.style.borderTopColor  = accent;
+        card.style.backgroundColor = bg;
+
+        card.innerHTML =
+            '<span style="display:block;font-size:0.65rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:' + accent + ';margin-bottom:0.4rem;">' + escHtml(s.cat) + '</span>' +
+            '<h3 style="font-family:\'Playfair Display\',Georgia,serif;font-size:0.92rem;font-weight:600;line-height:1.3;color:#0d2340;flex:1;">' + escHtml(s.name) + '</h3>';
+
+        card.addEventListener('click', function() { openModal(s); });
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(s); }
+        });
+
+        rightBox.appendChild(card);
+    });
+}
+
+// ── Initialise count on page load ────────────────────────────
+updateCount();
+
+// ── Modal elements ───────────────────────────────────────────
+var overlay = document.getElementById('scModal');
+var mCat    = document.getElementById('scModalCat');
+var mTitle  = document.getElementById('scModalTitle');
+var mDesc   = document.getElementById('scModalDesc');
+var mLink   = document.getElementById('scModalLink');
+var mClose  = document.getElementById('scModalClose');
+
+function openModal(s) {
+    if (!overlay) return;
+    var accent = catAccent[s.cat] || '#c8992a';
+    mCat.textContent       = s.cat;
+    mCat.style.color       = accent;
+    mTitle.textContent     = s.name;
+    mDesc.textContent      = s.desc;
+    mLink.href             = s.url;
+    mLink.style.background = accent;
+    overlay.classList.add('sc-open');
+    document.body.style.overflow = 'hidden';
+    if (mClose) mClose.focus();
+}
+
+function closeModal() {
+    if (!overlay) return;
+    overlay.classList.remove('sc-open');
+    document.body.style.overflow = '';
+}
+
+if (mClose)  mClose.addEventListener('click', closeModal);
+if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+// ── Notice popup (shows every page load) ─────────────────────
+var noticeOverlay = document.getElementById('noticeOverlay');
+var noticeClose   = document.getElementById('noticeClose');
+
+function closeNotice() {
+    if (!noticeOverlay) return;
+    noticeOverlay.classList.remove('notice-open');
+    document.body.style.overflow = '';
+}
+
+if (noticeOverlay && noticeClose) {
+    noticeOverlay.classList.add('notice-open');
+    document.body.style.overflow = 'hidden';
+    noticeClose.focus();
+
+    noticeClose.addEventListener('click', closeNotice);
+    noticeOverlay.addEventListener('click', function(e) {
+        if (e.target === noticeOverlay) closeNotice();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeNotice();
+    });
 }

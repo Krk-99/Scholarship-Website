@@ -874,3 +874,256 @@ section:nth-child(4) { animation-delay: 0.30s; }
         padding: 1.75rem 1.5rem;
     }
 }
+/* ============================================================
+   SCHOLARSHIP PAGE FILTER SIDEBAR & STRIP
+   ============================================================ */
+
+/* ── Layout: sidebar + main column wrapper ─────────────────── */
+.ScholarshipsLayout {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0;
+    background: var(--cream);
+}
+
+/* ── Left sidebar ──────────────────────────────────────────── */
+.ScholarshipsLayout .LeftBox {
+    flex: 0 0 240px;
+    min-width: 0;
+    background: var(--navy);
+    padding: 2rem 1.5rem;
+    min-height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* ── Sidebar label ─────────────────────────────────────────── */
+.FilterSidebarLabel {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.40);
+    margin-bottom: 0.5rem;
+}
+
+/* ── Sidebar filter buttons ────────────────────────────────── */
+.SidebarFilterBtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.35;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.SidebarFilterBtn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.30);
+    color: var(--white);
+}
+
+/* Active state colour is applied inline via JS (per-category accent) */
+.SidebarFilterBtn.active {
+    font-weight: 600;
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+/* ── Main content column (strip + card grid) ───────────────── */
+.ScholarshipsMain {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Filter Strip (count bar above cards) ──────────────────── */
+.FilterStrip {
+    background: var(--navy-mid);
+    padding: 0.7rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.FilterStrip .ResultCount {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* ── Card grid inside ScholarshipsMain ─────────────────────── */
+.ScholarshipsMain .RightBox {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+    align-content: start;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .ScholarshipsLayout {
+        flex-direction: column;
+    }
+
+    .ScholarshipsLayout .LeftBox {
+        flex: none;
+        width: 100%;
+        min-height: auto;
+        position: static;
+        padding: 1.25rem 1.5rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .FilterSidebarLabel {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .SidebarFilterBtn {
+        width: auto;
+        flex: 0 1 auto;
+        white-space: nowrap;
+    }
+
+    .SidebarFilterBtn.active {
+        transform: none;
+    }
+
+    .ScholarshipsMain .RightBox {
+        padding: 1.25rem;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+
+/* ============================================================
+   NOTICE POPUP — navpage1.html
+   ============================================================ */
+
+.Notice-Overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 35, 64, 0.65);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+}
+
+.Notice-Overlay.notice-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.Notice-Modal {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 24px 64px rgba(13, 35, 64, 0.28);
+    padding: 2.25rem 2.5rem 2rem;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    transform: translateY(24px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease;
+}
+
+.Notice-Overlay.notice-open .Notice-Modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.Notice-Icon {
+    display: block;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    line-height: 1;
+}
+
+.Notice-Title {
+    font-family: var(--font-head);
+    font-size: 1.35rem;
+    color: var(--navy);
+    margin-bottom: 0.9rem;
+}
+
+.Notice-Body {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+}
+
+.Notice-InlineLink {
+    color: var(--gold);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+}
+
+.Notice-InlineLink:hover {
+    color: var(--gold-light);
+}
+
+.Notice-Btn {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.65rem 2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.15s;
+}
+
+.Notice-Btn:hover {
+    background: var(--navy-mid);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 500px) {
+    .Notice-Modal {
+        padding: 1.75rem 1.5rem 1.5rem;
+    }
+}
