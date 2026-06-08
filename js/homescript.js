@@ -94,16 +94,16 @@ var scholarships = [
     { id: "S88", name: "Justin Eves Foundation Scholarships",                   cat: "Students with Disabilities",             desc: "Direct financial support helping Ontario students overcome learning disabilities via assistive tools.",                                                               url: "http://www.justinevesfoundation.com/" },
     { id: "S89", name: "Will Rogers Memorial Scholarship",                      cat: "Students with Disabilities",             desc: "Niche award favoring disabled applicants or those pursuing special education service certifications.",                                                               url: "https://www.willrogers.com/scholarship" },
     // LGBTQ2S+
-    { id: "S90", name: "Bill 7 Award",                                          cat: "LGBTQ2S+ Students",                      desc: "A $5,000 award specific to 2SLGBTQI+ students demonstrating financial need in Ontario institutions.",                                                               url: "https://bill7award.ca/" },
-    { id: "S91", name: "LOUD Foundation Scholarships",                          cat: "LGBTQ2S+ Students",                      desc: "National level awards supporting future community leaders and activists within the queer space.",                                                                    url: "https://loudbusiness.com/foundation/" },
-    { id: "S92", name: "Start Proud Awards",                                    cat: "LGBTQ2S+ Students",                      desc: "Aimed at LGBTQ+ talent tracking toward professional services, banking, corporate law, or tech.",                                                                    url: "https://startproud.org/scholarships" },
-    { id: "S93", name: "Imperial Sovereign Court of Toronto (ISCOT) Bursary",  cat: "LGBTQ2S+ Students",                      desc: "A highly localized grass-roots community bursary for queer or trans youth in the GTA/Ontario.",                                                                   url: "https://iscot.ca/" },
-    { id: "S94", name: "The Pride Education Network Scholarship",               cat: "LGBTQ2S+ Students",                      desc: "Assists graduating secondary school students displaying leadership in diversity groups such as GSAs.",                                                              url: "https://pridenet.ca/" },
-    { id: "S95", name: "Jeremy Dias Scholarship",                               cat: "LGBTQ2S+ Students",                      desc: "Maintained by the CCGSD to reward youth actively working to curb discrimination and transphobia.",                                                                 url: "https://ccgsd-ccdgs.org/scholarships/" },
-    { id: "S96", name: "Lambda Foundation Scholarships",                        cat: "LGBTQ2S+ Students",                      desc: "University-endowed research grants and undergraduate assistance centered on queer/trans studies.",                                                                  url: "https://lambdafoundation.org/" },
-    { id: "S97", name: "LGBTQ2+ STEM Scholarship",                             cat: "LGBTQ2S+ Students",                      desc: "Niche funding prioritizing marginalized queer individuals entering hard science domains.",                                                                          url: "https://startproud.org/scholarships" },
-    { id: "S98", name: "Out On Bay Street Scholarships",                        cat: "LGBTQ2S+ Students",                      desc: "Historical corporate recruitment and support modules, structurally linked to Start Proud platforms.",                                                               url: "https://startproud.org/" },
-    { id: "S99", name: "PFLAG Canada Scholarships",                             cat: "LGBTQ2S+ Students",                      desc: "Rewards youth allies and LGBTQ+ individuals who build community inclusion frameworks.",                                                                            url: "https://pflagcanada.ca/" },
+    { id: "S90", name: "Bill 7 Award",                                          cat: "2SLGBTQI+ Students",                      desc: "A $5,000 award specific to 2SLGBTQI+ students demonstrating financial need in Ontario institutions.",                                                               url: "https://bill7award.ca/" },
+    { id: "S91", name: "LOUD Foundation Scholarships",                          cat: "2SLGBTQI+ Students",                      desc: "National level awards supporting future community leaders and activists within the queer space.",                                                                    url: "https://loudbusiness.com/foundation/" },
+    { id: "S92", name: "Start Proud Awards",                                    cat: "2SLGBTQI+ Students",                      desc: "Aimed at LGBTQ+ talent tracking toward professional services, banking, corporate law, or tech.",                                                                    url: "https://startproud.org/scholarships" },
+    { id: "S93", name: "Imperial Sovereign Court of Toronto (ISCOT) Bursary",  cat: "2SLGBTQI+ Students",                      desc: "A highly localized grass-roots community bursary for queer or trans youth in the GTA/Ontario.",                                                                   url: "https://iscot.ca/" },
+    { id: "S94", name: "The Pride Education Network Scholarship",               cat: "2SLGBTQI+ Students",                      desc: "Assists graduating secondary school students displaying leadership in diversity groups such as GSAs.",                                                              url: "https://pridenet.ca/" },
+    { id: "S95", name: "Jeremy Dias Scholarship",                               cat: "2SLGBTQI+ Students",                      desc: "Maintained by the CCGSD to reward youth actively working to curb discrimination and transphobia.",                                                                 url: "https://ccgsd-ccdgs.org/scholarships/" },
+    { id: "S96", name: "Lambda Foundation Scholarships",                        cat: "2SLGBTQI+ Students",                      desc: "University-endowed research grants and undergraduate assistance centered on queer/trans studies.",                                                                  url: "https://lambdafoundation.org/" },
+    { id: "S97", name: "LGBTQ2+ STEM Scholarship",                             cat: "2SLGBTQI+ Students",                      desc: "Niche funding prioritizing marginalized queer individuals entering hard science domains.",                                                                          url: "https://startproud.org/scholarships" },
+    { id: "S98", name: "Out On Bay Street Scholarships",                        cat: "2SLGBTQI+ Students",                      desc: "Historical corporate recruitment and support modules, structurally linked to Start Proud platforms.",                                                               url: "https://startproud.org/" },
+    { id: "S99", name: "PFLAG Canada Scholarships",                             cat: "2SLGBTQI+ Students",                      desc: "Rewards youth allies and LGBTQ+ individuals who build community inclusion frameworks.",                                                                            url: "https://pflagcanada.ca/" },
     // Gender Equity & Women in STEM
     { id: "S100", name: "Opterus Helen Rose STEM Award",                        cat: "Gender Equity & Women in STEM",          desc: "A $5,000 scholarship celebrating entrepreneurial women pursuing science, math, or technology.",                                                                     url: "https://opterus.com/scholarships" },
     { id: "S101", name: "Opterus Valerie Ann Arts Award",                       cat: "Gender Equity & Women in STEM",          desc: "A $5,000 scholarship tailored toward young women expanding boundaries in creative or fine arts.",                                                                 url: "https://opterus.com/scholarships" },
@@ -115,13 +115,24 @@ var scholarships = [
     { id: "S107", name: "Women in Aviation International Scholarships",         cat: "Gender Equity & Women in STEM",          desc: "Highly specialized aviation, piloting, and aerospace engineering bursaries open to Canadian applicants.",                                                          url: "https://www.wai.org/scholarships" }
 ];
 
+// Categories
+
+var cat = [
+    "Indigenous Students",
+    "Black Students", 
+    "Other Racialized & Ethnic Communities", 
+    "Students with Disabilities", 
+    "2SLGBTQI+ Students",
+    "Gender Equity & Women in STEM"
+]
+
 // ── Category accent colours ─────────────────────────────────
 var catAccent = {
     "Indigenous Students":                   "#c8832a",
     "Black Students":                        "#2e7d32",
     "Other Racialized & Ethnic Communities": "#3f51b5",
     "Students with Disabilities":            "#7b1fa2",
-    "LGBTQ2S+ Students":                     "#c2185b",
+    "2SLGBTQI+ Students":                     "#c2185b",
     "Gender Equity & Women in STEM":         "#0090a1"
 };
 
@@ -130,7 +141,7 @@ var catBg = {
     "Black Students":                        "#edf7ed",
     "Other Racialized & Ethnic Communities": "#eef0fb",
     "Students with Disabilities":            "#f6eefb",
-    "LGBTQ2S+ Students":                     "#fde9f0",
+    "2SLGBTQI+ Students":                     "#fde9f0",
     "Gender Equity & Women in STEM":         "#e6f7f9"
 };
 
