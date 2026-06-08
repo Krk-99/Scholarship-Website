@@ -467,3 +467,410 @@ section {
 section:nth-child(2) { animation-delay: 0.10s; }
 section:nth-child(3) { animation-delay: 0.20s; }
 section:nth-child(4) { animation-delay: 0.30s; }
+
+
+/* ============================================================
+   SCHOLARSHIP GRID PAGE — navpage1.html additions
+   All new classes are prefixed (Filter*, SCard*, Modal*)
+   so they cannot collide with existing rules above.
+   ============================================================ */
+
+/* ── Filter Bar Section ───────────────────────────────────── */
+.FilterSection {
+    background: var(--navy);
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.FilterBar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.FilterBtn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.75);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    white-space: nowrap;
+}
+
+.FilterBtn:hover {
+    background: rgba(200,153,42,0.22);
+    border-color: var(--gold);
+    color: var(--gold-light);
+}
+
+.FilterBtn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+}
+
+.ResultCount {
+    margin-left: auto;
+    font-size: 0.83rem;
+    color: rgba(255,255,255,0.45);
+    white-space: nowrap;
+    font-family: var(--font-body);
+}
+
+/* ── Scholarship Grid Section ─────────────────────────────── */
+.ScholarshipSection {
+    background: var(--cream);
+    padding: 2.5rem 2.5rem 4rem;
+}
+
+.ScholarshipGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+/* ── Individual Scholarship Card (SCard) ──────────────────── */
+@keyframes scardIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.SCard {
+    --card-accent: #c8992a;
+    --card-bg:     #fdf3e7;
+    --card-color:  #1a1a2e;
+
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--card-accent);
+    box-shadow: 0 2px 12px rgba(13,35,64,0.07);
+    padding: 1.25rem 1.25rem 2.5rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: scardIn 0.35s ease both;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.SCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 32px rgba(13,35,64,0.14);
+}
+
+.SCard:focus-visible {
+    outline: 2px solid var(--card-accent);
+    outline-offset: 3px;
+}
+
+.SCard-cat {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--card-accent);
+    display: block;
+}
+
+.SCard-name {
+    font-family: var(--font-head);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--card-color);
+    line-height: 1.3;
+    flex: 1;
+}
+
+.SCard-arrow {
+    position: absolute;
+    bottom: 0.85rem;
+    right: 1rem;
+    font-size: 1.1rem;
+    color: var(--card-accent);
+    opacity: 0.35;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.SCard:hover .SCard-arrow {
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
+
+/* ── Modal Overlay ────────────────────────────────────────── */
+.ModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,35,64,0.62);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+}
+
+.ModalOverlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── Modal Box ────────────────────────────────────────────── */
+.Modal {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 24px 64px rgba(13,35,64,0.28);
+    padding: 2.5rem 2.75rem;
+    max-width: 540px;
+    width: 100%;
+    position: relative;
+    transform: translateY(28px) scale(0.97);
+    transition: transform 0.26s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease;
+    opacity: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.ModalOverlay.open .Modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.ModalClose {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.ModalClose:hover {
+    color: var(--text);
+    background: var(--cream);
+}
+
+.ModalCategory {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.ModalTitle {
+    font-family: var(--font-head);
+    font-size: clamp(1.2rem, 3vw, 1.55rem);
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+}
+
+.ModalDesc {
+    font-size: 0.97rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+}
+
+.ModalLink {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: filter 0.18s, transform 0.18s;
+}
+
+.ModalLink:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* ── Responsive — scholarship page ───────────────────────── */
+@media (max-width: 700px) {
+    .FilterSection {
+        padding: 1rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .ResultCount {
+        margin-left: 0;
+    }
+
+    .ScholarshipSection {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .ScholarshipGrid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .Modal {
+        padding: 1.75rem 1.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .ScholarshipGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* ============================================================
+   HOME PAGE (index.html) — ScholarshipsCard content styles
+   & SC-Modal — all prefixed SC- to avoid any collision
+   ============================================================ */
+
+/* Make cards flex-column so name text lays out properly */
+.ScholarshipsCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* ── SC Modal Overlay ────────────────────────────────────── */
+.SC-ModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,35,64,0.60);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+}
+
+.SC-ModalOverlay.sc-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── SC Modal Box ────────────────────────────────────────── */
+.SC-Modal {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 24px 64px rgba(13,35,64,0.28);
+    padding: 2.5rem 2.75rem;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    max-height: 88vh;
+    overflow-y: auto;
+    transform: translateY(24px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.26s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease;
+}
+
+.SC-ModalOverlay.sc-open .SC-Modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.SC-ModalClose {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #5a6070;
+    cursor: pointer;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+
+.SC-ModalClose:hover {
+    color: #1a1a2e;
+    background: #f9f6f0;
+}
+
+.SC-ModalCat {
+    display: block;
+    font-size: 0.70rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 0.55rem;
+}
+
+.SC-ModalTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.15rem, 3vw, 1.5rem);
+    color: #0d2340;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+}
+
+.SC-ModalDesc {
+    font-size: 0.97rem;
+    color: #5a6070;
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+}
+
+.SC-ModalLink {
+    display: inline-block;
+    background: #c8992a;
+    color: #0d2340;
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.4rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: filter 0.18s, transform 0.18s;
+}
+
+.SC-ModalLink:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .SC-Modal {
+        padding: 1.75rem 1.5rem;
+    }
+}

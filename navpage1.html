@@ -15,25 +15,29 @@
         <div id="NavPage2"><a href="navpage2.html"><button>Contact Us</button></a></div>
     </div>
     <section class="Box1">
-        <div id="TB1"class="TopBox">
+        <div id="TB1" class="TopBox">
             <h1 id="TB1Title">Welcome!</h1>
             <p id="TB1Text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pulvinar, orci ornare faucibus lacinia, sapien risus aliquet elit, eget facilisis justo metus non eros. Pellentesque dapibus nec sapien et eleifend. Nunc ullamcorper hendrerit odio vitae imperdiet. Ut malesuada orci sed lorem pellentesque, sed tristique tortor volutpat. Aenean sagittis turpis elit, vitae interdum justo vehicula et. Phasellus molestie, elit eget mattis pulvinar, ligula diam luctus sapien, feugiat imperdiet elit felis laoreet quam. Integer sit amet congue eros. Etiam blandit lobortis ante sit amet pulvinar. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce felis odio, congue ut velit ac, semper faucibus ante. Mauris viverra ut neque et consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam a fermentum velit. Donec tincidunt aliquet fringilla. Quisque feugiat id risus non pulvinar. Nulla mi nibh, mollis in luctus sed, scelerisque mattis mi.</p>
         </div>
     </section>
     <section class="Box2">
         <div class="LeftBox"><p>Pellentesque dignissim lacus vitae magna blandit aliquet. Nullam justo magna, venenatis a tempor sit amet, congue id magna. Aenean viverra, dui in auctor cursus, lorem odio tincidunt mi, ut placerat metus tellus in tellus. Nam consequat quam ligula, eget sodales ligula consequat ac. Aliquam viverra eu ligula quis dignissim. Pellentesque est risus, facilisis sed rhoncus quis, blandit at urna. Ut lectus arcu, condimentum pulvinar mauris eleifend, fringilla laoreet leo.</p></div>
-        <div class="RightBox">
-            <div id="S1" class="ScholarshipsCard"></div>
-            <div id="S2" class="ScholarshipsCard"></div>
-            <div id="S3" class="ScholarshipsCard"></div>
-            <div id="S4" class="ScholarshipsCard"></div>
-            <div id="S5" class="ScholarshipsCard"></div>
-            <div id="S6" class="ScholarshipsCard"></div>
-            <div id="S7" class="ScholarshipsCard"></div>
-            <div id="S8" class="ScholarshipsCard"></div>
-            <div id="S9" class="ScholarshipsCard"></div>
+        <div class="RightBox" id="scholarshipRightBox">
+            <!-- Cards injected by homescript.js -->
         </div>
     </section>
+
+    <!-- Modal -->
+    <div id="scModal" class="SC-ModalOverlay">
+        <div class="SC-Modal">
+            <button class="SC-ModalClose" id="scModalClose">&times;</button>
+            <span class="SC-ModalCat" id="scModalCat"></span>
+            <h2 class="SC-ModalTitle" id="scModalTitle"></h2>
+            <p class="SC-ModalDesc" id="scModalDesc"></p>
+            <a class="SC-ModalLink" id="scModalLink" href="#" target="_blank" rel="noopener noreferrer">Visit Official Website &#8599;</a>
+        </div>
+    </div>
+
     <script src="js/homescript.js"></script>
 </body>
 </html>
