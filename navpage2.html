@@ -11,21 +11,44 @@
         <div id="NavTitle"><h1>Ontario Scholarships</h1></div>
         <div id="NavHome"><a href="index.html"><button>Home</button></a></div>
         <div id="NavPage1"><a href="navpage1.html"><button>Scholarships</button></a></div>
-        <div id="AboutMe"><a href="aboutme.html"><button>About Us</button></a></div>
+        <div id="AboutMe"><a href="aboutme.html"><button>About Me</button></a></div>
         <div id="NavPage2"><a href="navpage2.html"><button>Contact Us</button></a></div>
     </div>
+
     <section class="Box1">
         <div id="TB1" class="TopBox">
             <h1 id="TB1Title">Contact Us</h1>
-            <p id="TB1Text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pulvinar, orci ornare faucibus lacinia, sapien risus aliquet elit, eget facilisis justo metus non eros. Pellentesque dapibus nec sapien et eleifend. Nunc ullamcorper hendrerit odio vitae imperdiet. Ut malesuada orci sed lorem pellentesque, sed tristique tortor volutpat. Aenean sagittis turpis elit, vitae interdum justo vehicula et. Phasellus molestie, elit eget mattis pulvinar, ligula diam luctus sapien, feugiat imperdiet elit felis laoreet quam. Integer sit amet congue eros. Etiam blandit lobortis ante sit amet pulvinar. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce felis odio, congue ut velit ac, semper faucibus ante. Mauris viverra ut neque et consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam a fermentum velit. Donec tincidunt aliquet fringilla. Quisque feugiat id risus non pulvinar. Nulla mi nibh, mollis in luctus sed, scelerisque mattis mi.</p>
+            <p id="TB1Text">Got a scholarship tip, a broken link to report, or just want to say hi? I'd love to hear from you. This site is a one-person project built to help students find funding they might not know exists — so any contribution, correction, or kind word genuinely goes a long way. Reach out through any of the options below.</p>
         </div>
     </section>
+
     <section class="Box2">
-        <div class="TopBox2"><h1>Ways of Contact</h1></div>
-        <div id="LB2"class="LeftBox"><p>Pellentesque dignissim lacus vitae magna blandit aliquet. Nullam justo magna, venenatis a tempor sit amet, congue id magna. Aenean viverra, dui in auctor cursus, lorem odio tincidunt mi, ut placerat metus tellus in tellus. Nam consequat quam ligula, eget sodales ligula consequat ac. Aliquam viverra eu ligula quis dignissim. Pellentesque est risus, facilisis sed rhoncus quis, blandit at urna. Ut lectus arcu, condimentum pulvinar mauris eleifend, fringilla laoreet leo.</p></div>
-        <div id="CB2"class="CenterBox"><p>Pellentesque dignissim lacus vitae magna blandit aliquet. Nullam justo magna, venenatis a tempor sit amet, congue id magna. Aenean viverra, dui in auctor cursus, lorem odio tincidunt mi, ut placerat metus tellus in tellus. Nam consequat quam ligula, eget sodales ligula consequat ac. Aliquam viverra eu ligula quis dignissim. Pellentesque est risus, facilisis sed rhoncus quis, blandit at urna. Ut lectus arcu, condimentum pulvinar mauris eleifend, fringilla laoreet leo.</p></div>
-        <div id="RB2"class="RightBox"><p>Pellentesque dignissim lacus vitae magna blandit aliquet. Nullam justo magna, venenatis a tempor sit amet, congue id magna. Aenean viverra, dui in auctor cursus, lorem odio tincidunt mi, ut placerat metus tellus in tellus. Nam consequat quam ligula, eget sodales ligula consequat ac. Aliquam viverra eu ligula quis dignissim. Pellentesque est risus, facilisis sed rhoncus quis, blandit at urna. Ut lectus arcu, condimentum pulvinar mauris eleifend, fringilla laoreet leo.</p></div>
+        <div class="TopBox2"><h1>Ways to Reach Me</h1></div>
+
+        <!-- Email card -->
+        <div id="LB2" class="LeftBox">
+            <h1>Email</h1>
+            <p>The best way to report a broken scholarship link or suggest a new one to add. I check it regularly — shoot me a message and I'll get back to you when I can.</p>
+            <button class="ContactBtn" id="revealEmailBtn" onclick="revealEmail()">Show Email Address</button>
+            <span class="ContactDetail" id="emailDisplay" style="display:none;"></span>
+        </div>
+
+        <!-- Instagram card -->
+        <div id="CB2" class="CenterBox">
+            <h1>Instagram</h1>
+            <p>Send a DM if you'd prefer a more casual conversation. Always open to hearing from students. Account is private but just send a message, if it's just a request it'll be done quickly!</p>
+            <button class="ContactBtn" id="revealIgBtn" onclick="revealInstagram()">Show Instagram</button>
+            <span class="ContactDetail" id="igDisplay" style="display:none;"></span>
+        </div>
+
+        <!-- GitHub card -->
+        <div id="RB2" class="RightBox">
+            <h1>GitHub</h1>
+            <p>Want to see how this site was built, or spot something in the code worth fixing? The full project is open on GitHub — feel free to browse, open an issue, or fork it.</p>
+            <a class="ContactBtn" href="https://github.com/Krk-99" target="_blank" rel="noopener noreferrer">View GitHub Profile &#8599;</a>
+        </div>
     </section>
-    <script src="js/homescript.js"></script>
+
+    <script src="js/contactscript.js"></script>
 </body>
 </html>
