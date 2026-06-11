@@ -4,9 +4,9 @@
    Everything scoped under the  prez  namespace.
    ─────────────────────────────────────────────────────────────
    Controls:
-     • Left-click  → next slide
-     • Right-click → previous slide
-     • Esc         → close
+     • Left-click / Wheel-Down / ArrowRight  → Next Slide
+     • Right-click / Wheel-Up / ArrowLeft    → Previous Slide
+     • Esc                                   → Close Deck
 */
 
 (function () {
@@ -277,12 +277,12 @@
   ];
 
   /* ── Main controller ────────────────────────────────────────── */
-  let currentIndex = 0;
-  let renderer     = null;
-  let isAnimating  = false;
+  let currentIndex  = 0;
+  let renderer      = null;
+  let isAnimating   = false;
+  let lastWheelTime = 0;
 
   function buildOverlay() {
-    // Prevent double-build
     if (document.getElementById('prez-overlay')) return;
 
     /* ── CSS link ──────────────────────────────────────────────── */
@@ -318,6 +318,7 @@
       } else {
         slide.innerHTML = `
           <span class="prez-eyebrow">${s.eyebrow}</span>
+          <h2 class="prez-title">${s.title}</h2>
           <div class="prez-img-frame">
             <img src="${s.src}" alt="${s.caption}">
             <div class="prez-img-caption">${s.caption}</div>
@@ -348,7 +349,7 @@
     /* ── Hint ────────────────────────────────────────────────────── */
     const hint = document.createElement('div');
     hint.id = 'prez-hint';
-    hint.textContent = '← Right-click  ·  Left-click →';
+    hint.textContent = 'Scroll / Arrows / Click';
     overlay.appendChild(hint);
 
     /* ── Close btn ───────────────────────────────────────────────── */
@@ -365,7 +366,6 @@
 
     /* ── Events ──────────────────────────────────────────────────── */
     overlay.addEventListener('click', e => {
-      // Don't fire on the close button
       if (e.target === closeBtn || closeBtn.contains(e.target)) return;
       navigate(1);
     });
@@ -374,6 +374,18 @@
       e.preventDefault();
       navigate(-1);
     });
+
+    // Premium Scroll Trigger with timing lock
+    overlay.addEventListener('wheel', e => {
+      e.preventDefault();
+      const now = Date.now();
+      if (now - lastWheelTime < 950) return; // Matches execution pipeline length
+
+      if (Math.abs(e.deltaY) > 12) {
+        lastWheelTime = now;
+        navigate(e.deltaY > 0 ? 1 : -1);
+      }
+    }, { passive: false });
 
     closeBtn.addEventListener('click', e => {
       e.stopPropagation();
@@ -391,7 +403,6 @@
   }
 
   function updateUI() {
-    const overlay = document.getElementById('prez-overlay');
     const counter = document.getElementById('prez-counter');
     const dots    = document.querySelectorAll('#prez-dots .prez-dot');
 
@@ -411,28 +422,38 @@
     const prevSlide = allSlides[currentIndex];
     const nextSlide = allSlides[index];
 
-    const enterClass = direction > 0 ? 'prez-enter-right' : 'prez-enter-left';
-    const exitClass  = direction > 0 ? 'prez-exit-left'   : 'prez-exit-right';
+    // Wipe out residual architecture lifecycle classes
+    allSlides.forEach(s => {
+      s.classList.remove('prez-exit-next', 'prez-exit-prev', 'prez-enter-next', 'prez-enter-prev');
+    });
 
-    // Exit current
-    prevSlide.classList.add(exitClass);
-    prevSlide.addEventListener('animationend', () => {
-      prevSlide.classList.remove('prez-active', exitClass);
-    }, { once: true });
+    // Handle 3D Layered Separation Pipeline
+    if (direction > 0) {
+      prevSlide.classList.add('prez-exit-next');
+      nextSlide.classList.add('prez-enter-next');
+    } else {
+      prevSlide.classList.add('prez-exit-prev');
+      nextSlide.classList.add('prez-enter-prev');
+    }
 
-    // Enter next
+    // Force DOM processing layer repaint execution 
+    nextSlide.offsetHeight;
+
+    // Displace index states safely
+    prevSlide.classList.remove('prez-active');
     currentIndex = index;
-    nextSlide.classList.add('prez-active', enterClass);
-    nextSlide.addEventListener('animationend', () => {
-      nextSlide.classList.remove(enterClass);
-      isAnimating = false;
-    }, { once: true });
+    nextSlide.classList.add('prez-active');
 
-    // Switch blob palette
+    // Switch dynamic aesthetic context variables
     renderer.setPalette(SLIDE_PALETTES[currentIndex]);
-    spawnRipple(overlay, SLIDE_PALETTES[currentIndex][2] + '55');
+    spawnRipple(overlay, SLIDE_PALETTES[currentIndex][2] + '33');
 
     updateUI();
+
+    // Release global UI transition hooks safely once pipeline clears
+    setTimeout(() => {
+      isAnimating = false;
+    }, 850);
   }
 
   function navigate(direction) {
@@ -447,8 +468,8 @@
     const overlay = document.getElementById('prez-overlay');
     currentIndex = 0;
 
-    // Reset all slides
     document.querySelectorAll('.prez-slide').forEach((s, i) => {
+      s.classList.remove('prez-exit-next', 'prez-exit-prev', 'prez-enter-next', 'prez-enter-prev');
       s.classList.toggle('prez-active', i === 0);
     });
 
@@ -468,7 +489,6 @@
     document.removeEventListener('keydown', onKey);
   }
 
-  /* ── Wire up launch button ──────────────────────────────────── */
   function init() {
     const btn = document.getElementById('prez-launch-btn');
     if (btn) {

@@ -21,7 +21,7 @@
   border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(200,153,42,0.40);
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.2s;
   position: relative;
   overflow: hidden;
   margin: 2rem auto;
@@ -32,9 +32,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.22) 0%,
-    rgba(255,255,255,0) 60%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 60%);
   pointer-events: none;
 }
 
@@ -46,10 +44,6 @@
 
 #prez-launch-btn:active {
   transform: translateY(0) scale(0.98);
-}
-
-#prez-launch-btn .prez-btn-icon {
-  font-size: 1.1rem;
 }
 
 /* ── Full-viewport Overlay ─────────────────────────────────── */
@@ -78,7 +72,6 @@
   z-index: 0;
 }
 
-/* ── Noise grain overlay ────────────────────────────────────── */
 #prez-overlay::after {
   content: '';
   position: absolute;
@@ -90,109 +83,172 @@
   opacity: 0.45;
 }
 
-/* ── Slide Container ─────────────────────────────────────────── */
+/* ── Premium 3D Presentation Container ─────────────────────── */
 #prez-slides-wrap {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
   padding: 4.5rem 2.5rem 5.5rem;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  overflow: hidden;
 }
 
-/* ── Individual Slide ─────────────────────────────────────────── */
+/* ── Cinematic Layout Architecture ────────────────────────── */
 .prez-slide {
-  display: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-width: 800px;
+  max-width: 850px;
   width: 100%;
+  height: 100%;
   gap: 1.5rem;
+  pointer-events: none;
+  opacity: 0;
+  
+  /* Ultimate organic pacing curve (Cubic-Bezier matching Power4.Out) */
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1),
+              clip-path 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-style: preserve-3d;
 }
 
+/* Active State Pipeline */
 .prez-slide.prez-active {
-  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateZ(0px) translateY(0) scale(1);
+  clip-path: inset(0% 0% 0% 0%);
+  z-index: 5;
 }
 
-/* ── Slide entrance animations ──────────────────────────────── */
-@keyframes prez-slide-in-right {
-  from { opacity: 0; transform: translateX(60px) scale(0.96); }
-  to   { opacity: 1; transform: translateX(0)    scale(1);    }
-}
-@keyframes prez-slide-in-left {
-  from { opacity: 0; transform: translateX(-60px) scale(0.96); }
-  to   { opacity: 1; transform: translateX(0)     scale(1);    }
-}
-@keyframes prez-slide-out-left {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to   { opacity: 0; transform: translateX(-60px) scale(0.96); }
-}
-@keyframes prez-slide-out-right {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to   { opacity: 0; transform: translateX(60px) scale(0.96); }
+/* Outgoing Forward: Current slide scales down, slips back into deep 3D canvas */
+.prez-slide.prez-exit-next {
+  opacity: 0;
+  transform: translateZ(-200px) translateY(-30px) scale(0.85);
+  z-index: 1;
 }
 
-.prez-slide.prez-enter-right { animation: prez-slide-in-right  0.45s cubic-bezier(0.22,1,0.36,1) both; }
-.prez-slide.prez-enter-left  { animation: prez-slide-in-left   0.45s cubic-bezier(0.22,1,0.36,1) both; }
-.prez-slide.prez-exit-left   { animation: prez-slide-out-left  0.30s ease-in both; }
-.prez-slide.prez-exit-right  { animation: prez-slide-out-right 0.30s ease-in both; }
+/* Incoming Forward: New slide layers gracefully upward over background via masked wipe */
+.prez-slide.prez-enter-next {
+  opacity: 0;
+  transform: translateY(120px) translateZ(50px) scale(1.05);
+  clip-path: inset(100% 0% 0% 0%);
+  z-index: 6;
+}
 
-/* ── Slide eyebrow tag ───────────────────────────────────────── */
+/* Outgoing Backward: Current slide slides downward off the interface */
+.prez-slide.prez-exit-prev {
+  opacity: 0;
+  transform: translateY(120px) translateZ(50px) scale(1.02);
+  clip-path: inset(100% 0% 0% 0%);
+  z-index: 6;
+}
+
+/* Incoming Backward: Past slide steps forward from the deep background coordinates */
+.prez-slide.prez-enter-prev {
+  opacity: 0;
+  transform: translateZ(-200px) translateY(-30px) scale(0.85);
+  z-index: 1;
+}
+
+/* ── Premium Content Stagger Pipeline ───────────────────────── */
+.prez-eyebrow, 
+.prez-title, 
+.prez-divider, 
+.prez-body, 
+.prez-img-frame {
+  opacity: 0;
+  transform: translateY(35px) translateZ(10px);
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Progression cascade rules mapping stagger steps */
+.prez-slide.prez-active .prez-eyebrow {
+  opacity: 0.85;
+  transform: translateY(0) translateZ(0);
+  transition-delay: 0.18s;
+}
+.prez-slide.prez-active .prez-title {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+  transition-delay: 0.28s;
+}
+.prez-slide.prez-active .prez-divider {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+  transition-delay: 0.35s;
+}
+.prez-slide.prez-active .prez-body,
+.prez-slide.prez-active .prez-img-frame {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+  transition-delay: 0.44s;
+}
+
+/* ── Slide Styling Elements ─────────────────────────────────── */
 .prez-eyebrow {
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #e8b84b;
-  opacity: 0.85;
 }
 
-/* ── Slide Title ─────────────────────────────────────────────── */
 .prez-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(2rem, 5.5vw, 3.6rem);
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
   font-weight: 700;
   color: #ffffff;
   line-height: 1.15;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 30px rgba(0,0,0,0.4);
 }
 
-/* ── Slide Body ──────────────────────────────────────────────── */
 .prez-body {
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2vw, 1.15rem);
   line-height: 1.85;
-  color: rgba(255,255,255,0.78);
-  max-width: 640px;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 650px;
 }
 
-/* ── Image Slide ────────────────────────────────────────────── */
+.prez-divider {
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #c8992a, #e8b84b);
+  border-radius: 2px;
+  margin: 0.2rem auto;
+}
+
+/* ── Premium Image Architecture ────────────────────────────── */
 .prez-img-frame {
   position: relative;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 16px 56px rgba(0,0,0,0.6);
-  border: 2px solid rgba(200,153,42,0.5);
-  max-width: 580px;
+  box-shadow: 0 25px 65px rgba(0,0,0,0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  max-width: 620px;
   width: 100%;
 }
 
 .prez-img-frame img {
   width: 100%;
-  height: 340px;
+  height: 360px;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .prez-img-frame:hover img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 .prez-img-caption {
@@ -200,108 +256,95 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0.6rem 1rem;
-  background: linear-gradient(transparent, rgba(5,13,26,0.85));
+  padding: 1rem;
+  background: linear-gradient(transparent, rgba(5,13,26,0.95));
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.9);
   letter-spacing: 0.03em;
 }
 
-/* ── Decorative gold divider ─────────────────────────────────── */
-.prez-divider {
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #c8992a, #e8b84b);
-  border-radius: 2px;
-  margin: 0 auto;
-}
-
-/* ── Progress dots ───────────────────────────────────────────── */
+/* ── UI Controls Overlays ──────────────────────────────────── */
 #prez-dots {
   position: absolute;
-  bottom: 1.8rem;
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 10;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
   align-items: center;
 }
 
 .prez-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
-  transition: background 0.3s, transform 0.3s;
-  cursor: default;
+  transition: background 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .prez-dot.prez-dot-active {
   background: #e8b84b;
-  transform: scale(1.45);
+  transform: scale(1.6);
 }
 
-/* ── Slide counter ────────────────────────────────────────────── */
 #prez-counter {
   position: absolute;
-  bottom: 1.6rem;
-  right: 2rem;
-  z-index: 3;
+  bottom: 1.8rem;
+  right: 2.5rem;
+  z-index: 10;
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.09em;
-  color: rgba(255,255,255,0.30);
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.35);
 }
 
-/* ── Hint text ────────────────────────────────────────────────── */
 #prez-hint {
   position: absolute;
-  bottom: 1.6rem;
-  left: 2rem;
-  z-index: 3;
+  bottom: 1.8rem;
+  left: 2.5rem;
+  z-index: 10;
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.07em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.25);
 }
 
-/* ── Close button ─────────────────────────────────────────────── */
 #prez-close {
   position: absolute;
-  top: 1.2rem;
+  top: 1.5rem;
   right: 1.5rem;
-  z-index: 10;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: rgba(255,255,255,0.7);
-  font-size: 1.3rem;
-  line-height: 1;
-  width: 2.4rem;
-  height: 2.4rem;
+  z-index: 12;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6);
+  font-size: 1.4rem;
+  width: 2.6rem;
+  height: 2.6rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
+  transition: background 0.3s, color 0.3s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  backdrop-filter: blur(8px);
 }
 
 #prez-close:hover {
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.15);
   color: #fff;
-  transform: rotate(90deg) scale(1.1);
+  transform: rotate(90deg) scale(1.05);
 }
 
-/* ── Lava splash ripple (triggered on slide change) ────────── */
+/* ── Background Ripple Engine ──────────────────────────────── */
 @keyframes prez-ripple {
-  0%   { transform: scale(0); opacity: 0.7; }
-  100% { transform: scale(4); opacity: 0;   }
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(3.5); opacity: 0; }
 }
 
 .prez-ripple-circle {
@@ -309,25 +352,28 @@
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  animation: prez-ripple 0.7s ease-out forwards;
+  animation: prez-ripple 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ── Reduced motion ───────────────────────────────────────────── */
+/* ── Accessibility ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .prez-slide.prez-enter-right,
-  .prez-slide.prez-enter-left,
-  .prez-slide.prez-exit-left,
-  .prez-slide.prez-exit-right {
-    animation: none;
+  .prez-slide, .prez-eyebrow, .prez-title, .prez-divider, .prez-body, .prez-img-frame {
+    transition: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
   }
 }
 
-/* ── Mobile tweaks ───────────────────────────────────────────── */
-@media (max-width: 600px) {
+/* ── Responsive Refinements ─────────────────────────────────── */
+@media (max-width: 768px) {
   #prez-slides-wrap {
-    padding: 3.5rem 1.25rem 4.5rem;
+    padding: 4rem 1.5rem 5rem;
   }
   .prez-img-frame img {
-    height: 220px;
+    height: 240px;
+  }
+  #prez-hint {
+    display: none;
   }
 }
