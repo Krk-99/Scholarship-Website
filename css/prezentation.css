@@ -1,0 +1,333 @@
+/* ============================================================
+   PRESENTATION MODE — prezentation.css
+   All selectors prefixed  prez-  to avoid any collision
+   with existing styles.css rules.
+   ============================================================ */
+
+/* ── Launch Button ─────────────────────────────────────────── */
+#prez-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: linear-gradient(135deg, #c8992a 0%, #e8b84b 100%);
+  color: #0d2340;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(200,153,42,0.40);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  position: relative;
+  overflow: hidden;
+  margin: 2rem auto;
+  display: flex;
+}
+
+#prez-launch-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.22) 0%,
+    rgba(255,255,255,0) 60%);
+  pointer-events: none;
+}
+
+#prez-launch-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(200,153,42,0.55);
+  filter: brightness(1.08);
+}
+
+#prez-launch-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+#prez-launch-btn .prez-btn-icon {
+  font-size: 1.1rem;
+}
+
+/* ── Full-viewport Overlay ─────────────────────────────────── */
+#prez-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  background: #050d1a;
+  user-select: none;
+}
+
+#prez-overlay.prez-visible {
+  display: flex;
+}
+
+/* ── Blob Canvas (background liquid effect) ─────────────────── */
+#prez-blob-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Noise grain overlay ────────────────────────────────────── */
+#prez-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.45;
+}
+
+/* ── Slide Container ─────────────────────────────────────────── */
+#prez-slides-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 4.5rem 2.5rem 5.5rem;
+}
+
+/* ── Individual Slide ─────────────────────────────────────────── */
+.prez-slide {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.prez-slide.prez-active {
+  display: flex;
+}
+
+/* ── Slide entrance animations ──────────────────────────────── */
+@keyframes prez-slide-in-right {
+  from { opacity: 0; transform: translateX(60px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0)    scale(1);    }
+}
+@keyframes prez-slide-in-left {
+  from { opacity: 0; transform: translateX(-60px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0)     scale(1);    }
+}
+@keyframes prez-slide-out-left {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(-60px) scale(0.96); }
+}
+@keyframes prez-slide-out-right {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(60px) scale(0.96); }
+}
+
+.prez-slide.prez-enter-right { animation: prez-slide-in-right  0.45s cubic-bezier(0.22,1,0.36,1) both; }
+.prez-slide.prez-enter-left  { animation: prez-slide-in-left   0.45s cubic-bezier(0.22,1,0.36,1) both; }
+.prez-slide.prez-exit-left   { animation: prez-slide-out-left  0.30s ease-in both; }
+.prez-slide.prez-exit-right  { animation: prez-slide-out-right 0.30s ease-in both; }
+
+/* ── Slide eyebrow tag ───────────────────────────────────────── */
+.prez-eyebrow {
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8b84b;
+  opacity: 0.85;
+}
+
+/* ── Slide Title ─────────────────────────────────────────────── */
+.prez-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5.5vw, 3.6rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+}
+
+/* ── Slide Body ──────────────────────────────────────────────── */
+.prez-body {
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.85;
+  color: rgba(255,255,255,0.78);
+  max-width: 640px;
+}
+
+/* ── Image Slide ────────────────────────────────────────────── */
+.prez-img-frame {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 56px rgba(0,0,0,0.6);
+  border: 2px solid rgba(200,153,42,0.5);
+  max-width: 580px;
+  width: 100%;
+}
+
+.prez-img-frame img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.prez-img-frame:hover img {
+  transform: scale(1.03);
+}
+
+.prez-img-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(transparent, rgba(5,13,26,0.85));
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.03em;
+}
+
+/* ── Decorative gold divider ─────────────────────────────────── */
+.prez-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #c8992a, #e8b84b);
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+/* ── Progress dots ───────────────────────────────────────────── */
+#prez-dots {
+  position: absolute;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.prez-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: background 0.3s, transform 0.3s;
+  cursor: default;
+}
+
+.prez-dot.prez-dot-active {
+  background: #e8b84b;
+  transform: scale(1.45);
+}
+
+/* ── Slide counter ────────────────────────────────────────────── */
+#prez-counter {
+  position: absolute;
+  bottom: 1.6rem;
+  right: 2rem;
+  z-index: 3;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  color: rgba(255,255,255,0.30);
+}
+
+/* ── Hint text ────────────────────────────────────────────────── */
+#prez-hint {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 2rem;
+  z-index: 3;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+}
+
+/* ── Close button ─────────────────────────────────────────────── */
+#prez-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  z-index: 10;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.7);
+  font-size: 1.3rem;
+  line-height: 1;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+#prez-close:hover {
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* ── Lava splash ripple (triggered on slide change) ────────── */
+@keyframes prez-ripple {
+  0%   { transform: scale(0); opacity: 0.7; }
+  100% { transform: scale(4); opacity: 0;   }
+}
+
+.prez-ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  animation: prez-ripple 0.7s ease-out forwards;
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .prez-slide.prez-enter-right,
+  .prez-slide.prez-enter-left,
+  .prez-slide.prez-exit-left,
+  .prez-slide.prez-exit-right {
+    animation: none;
+  }
+}
+
+/* ── Mobile tweaks ───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #prez-slides-wrap {
+    padding: 3.5rem 1.25rem 4.5rem;
+  }
+  .prez-img-frame img {
+    height: 220px;
+  }
+}
